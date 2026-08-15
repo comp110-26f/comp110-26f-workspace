@@ -1,0 +1,12 @@
+{
+    "files.exclude": {
+        "__pycache__": true,
+        ".venv": true,
+        ".python-version": true,
+        ".pytest_cache": true,
+        "pyproject.toml": true,
+        "README.md": true,
+        "uv.lock": true,
+        ".vscode": true
+    },
+}

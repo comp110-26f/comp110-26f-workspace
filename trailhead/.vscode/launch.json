@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Trailhead: Debug Server",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "trailhead",
+      "args": [
+        "--root",
+        "${workspaceFolder}"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true,
+      // Trailhead 0.2.2 starts student code through a Python 3.14-compatible
+      // bootstrap, so debugpy can attach to child processes and bind breakpoints.
+      "subProcess": true,
+
+      // select the managed python installation
+      "python": "${workspaceFolder}/.venv/bin/python",
+      "windows": {
+        "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe"
+      }
+    }
+  ]
+}

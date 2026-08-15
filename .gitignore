@@ -1,0 +1,33 @@
+# Python bytecode and interpreter caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Project virtual environments
+.venv/
+venv/
+env/
+
+# Package and build output
+build/
+dist/
+*.egg-info/
+.eggs/
+wheels/
+
+# Test, coverage, type-checker, and linter output
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+
+# Jupyter's automatic notebook checkpoints
+.ipynb_checkpoints/
+
+# Operating-system metadata
+.DS_Store
+Thumbs.db

@@ -1,0 +1,24 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Sync all workspace projects",
+			"type": "process",
+			"command": "uv",
+			"args": [
+				"run",
+				"--managed-python",
+				"${workspaceFolder}/sync.py"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [],
+			"presentation": {
+				"clear": true,
+				"focus": true,
+				"reveal": "always"
+			}
+		}
+	]
+}

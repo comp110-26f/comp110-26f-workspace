@@ -1,0 +1,18 @@
+{
+  "files.exclude": {
+    "__pycache__": true,
+    ".ruff_cache": true,
+    ".venv": true,
+    ".python-version": true,
+    ".pytest_cache": true,
+    "pyproject.toml": true,
+    "README.md": true,
+    "uv.lock": true,
+    ".vscode": true
+  },
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": false
+}
