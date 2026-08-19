@@ -1,6 +1,7 @@
 # Workspace support
 
-`sync.py` prepares and checks every Python project in this VS Code workspace.
+`sync.py` prepares and checks every Python project in this VS Code workspace. It
+supports Git 2.39 or newer.
 
 ## First-time setup
 

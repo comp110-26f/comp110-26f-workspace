@@ -44,8 +44,15 @@ If VSCode opens immediately after install, select "Continue without Signing In" 
    [official Git for Windows page](https://git-scm.com/install/windows).
    Choose x64 unless your computer is not CCI and you know it to be ARM, instead.
 2. Run the downloaded installer.
-3. You may keep the default selections through the initial screens. On the **Choosing the default editor used by Git** page, change the selection to use **Visual Studio Code** as Git's default editor. Accept defaults otherwise through the many additional advanced settings screens.
-4. Finish the installation.
+3. You may keep the default selections through the initial screens. On the
+   **Choosing the default editor used by Git** page, change the selection to use
+   **Visual Studio Code** as Git's default editor.
+4. On the **Configuring the line ending conversions** page, keep **Checkout
+   Windows-style, commit Unix-style line endings** selected. This lets Windows
+   programs use CRLF line endings while Git stores shared text files with LF line
+   endings.
+5. Accept the defaults on the remaining advanced settings screens, then finish
+   the installation.
 
 The Git project's
 [installation documentation](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
@@ -74,6 +81,20 @@ may be newer. If PowerShell cannot find Git, close every PowerShell window
 (**Alt+F4** closes the active window), open a new PowerShell window, and try
 again. Restarting lets applications read the updated `PATH`, which is the list
 of locations Windows searches for commands.
+
+Verify the line-ending setting selected during installation:
+
+```powershell
+git config --get core.autocrlf
+```
+
+The result should be `true`. If it is blank or reports a different value, set
+the recommended behavior and verify it again:
+
+```powershell
+git config --global core.autocrlf true
+git config --get core.autocrlf
+```
 
 ## 4. Install uv
 

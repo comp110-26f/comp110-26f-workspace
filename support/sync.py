@@ -104,6 +104,40 @@ def run_command(description: str, command: list[str], directory: Path) -> bool:
     return succeeded
 
 
+def preview_merge(git: str) -> int | None:
+    """Return Git's merge preview status without printing its object output."""
+
+    description = "Check whether the course update can be merged without conflicts"
+    command = [git, "merge-tree", "--write-tree", "HEAD", "origin/HEAD"]
+
+    print(f"\n  {description}")
+    print(f"  > {subprocess.list2cmdline(command)}", flush=True)
+
+    try:
+        completed = subprocess.run(
+            command,
+            cwd=WORKSPACE_DIRECTORY,
+            stdout=subprocess.DEVNULL,
+            check=False,
+        )
+    except OSError as error:
+        print_result(False, f"Could not start the command: {error}")
+        return None
+
+    if completed.returncode == 0:
+        print_result(True, description)
+    elif completed.returncode == 1:
+        print_result(False, f"{description} (Git found merge conflicts)")
+    else:
+        print_result(
+            False,
+            f"{description} (Git could not perform the check; the command exited "
+            f"with code {completed.returncode})",
+        )
+
+    return completed.returncode
+
+
 # ---------------------------------------------------------------------------
 # Part 3: Discover projects instead of hard-coding their names
 # ---------------------------------------------------------------------------
@@ -151,15 +185,20 @@ def update_workspace(git: str) -> bool:
         print("\n  Project setup will continue so you can see any other problems.")
         return False
 
-    merge_is_clean = run_command(
-        "Check whether the course update can be merged without conflicts",
-        [git, "merge-tree", "--write-tree", "--quiet", "HEAD", "origin/HEAD"],
-        WORKSPACE_DIRECTORY,
-    )
-    if not merge_is_clean:
+    merge_status = preview_merge(git)
+    if merge_status == 1:
         print(
             "\n  Git predicts that the course update would conflict with local "
             "work, so it was not applied."
+        )
+        print("  The working files and Git index were left unchanged.")
+        print("  Project setup will continue so you can see any other problems.")
+        return False
+
+    if merge_status != 0:
+        print(
+            "\n  Git could not check the course update safely, so it was not "
+            "applied."
         )
         print("  The working files and Git index were left unchanged.")
         print("  Project setup will continue so you can see any other problems.")
