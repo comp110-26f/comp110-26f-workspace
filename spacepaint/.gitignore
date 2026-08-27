@@ -5,6 +5,8 @@ __pycache__/
 *.py[cod]
 dist/
 *.zip
+.python-version
+uv.lock
 
 # Keep verified images intentionally; ignore ad-hoc captures.
 artifacts/*.png
