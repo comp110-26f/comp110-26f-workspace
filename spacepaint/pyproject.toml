@@ -2,7 +2,6 @@
 name = "spacepaint"
 version = "0.1.0"
 description = "A radiant 3D turtle-graphics environment for introductory Python"
-readme = "README.md"
 license = "MIT"
 authors = [
     { name = "Kris Jordan", email = "kris@cs.unc.edu" },

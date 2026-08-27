@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Create Spacepaint Part 1 Submission",
+      "label": "Create EX01 - Spacepaint Submission",
       "type": "process",
       "command": "uv",
       "args": [
