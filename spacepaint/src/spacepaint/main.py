@@ -15,6 +15,7 @@ from enum import Enum
 from importlib import import_module
 from importlib.util import module_from_spec, spec_from_file_location
 from math import atan, exp, isfinite, radians, sin, sqrt, tan
+from os import PathLike
 from pathlib import Path
 from random import Random
 from types import ModuleType
@@ -188,7 +189,9 @@ class RunnableApp(Protocol):
     def step(self) -> None:
         """Render one application frame."""
 
-    def screenshot(self, namePrefix: str, defaultFilename: bool = False) -> str | None:
+    def screenshot(
+        self, namePrefix: PathLike[str], defaultFilename: bool = False
+    ) -> PathLike[str] | None:
         """Write the current framebuffer to an image file."""
 
     def destroy(self) -> None:

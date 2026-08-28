@@ -8,11 +8,13 @@ from argparse import ArgumentParser, Namespace
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import datetime
+from importlib import import_module
 from importlib.util import module_from_spec, spec_from_file_location
+from os import PathLike
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from types import ModuleType
-from typing import cast
+from typing import Any, cast
 from zipfile import ZIP_DEFLATED, ZipFile
 
 from spacepaint.main import GameConfig, StudentProgramProblem, create_scene_app
@@ -59,6 +61,12 @@ def default_archive_name(now: datetime | None = None) -> str:
 
 def _problem_message(problem: StudentProgramProblem) -> str:
     return f"student program failed at {problem.location}: {problem.summary}"
+
+
+def _panda_filename(path: Path) -> PathLike[str]:
+    """Convert an OS-native path to Panda3D's portable filename representation."""
+    panda = cast(Any, import_module("panda3d.core"))
+    return cast(PathLike[str], panda.Filename.from_os_specific(str(path.resolve())))
 
 
 def _load_submission_module(script: Path) -> ModuleType:
@@ -119,7 +127,7 @@ def render_completed_artwork(
         for _ in range(CAPTURE_FRAME_COUNT):
             app.step()
         screenshot_result = app.screenshot(
-            namePrefix=str(output.resolve()),
+            namePrefix=_panda_filename(output),
             defaultFilename=False,
         )
         if screenshot_result is None:
