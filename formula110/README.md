@@ -76,9 +76,6 @@ required `control` function must retain the exact typed shape
 `control(RobotSensors) -> RobotCommand` (the parameter name may differ) and a
 non-empty function docstring as its first body statement.
 
-Run all commands in this handout from a terminal opened for the `formula110`
-project.
-
 ### Run the demo
 
 First, open `src/controllers/demo.py`. Its controller always requests full
@@ -265,15 +262,54 @@ uv run racing --student-module controllers.level_1
 ### Race Level 1 against Level 0
 
 The most direct test of an improvement is to run both programs in the same
-race. The level you are testing is the challenger:
+race. The level you are testing is the challenger.
 
-```text
+The examples below are each **one command spread across several lines**. Long
+commands are easier to read this way: each option beginning with `--` gets its
+own line. These options choose the two controllers, set the race length to 30
+seconds, and open the simulator so you can watch.
+
+A special character at the end of a line tells your terminal, "This command
+continues on the next line":
+
+- macOS/Linux (Bash or Zsh) uses a backslash (`\`).
+- Windows PowerShell uses a backtick (`` ` ``), which is different from an
+  apostrophe (`'`).
+
+Keep that character at the very end of the line, with no spaces after it. The
+last line has no continuation character because it finishes the command. The
+indentation is optional and makes the options easier to read.
+
+Use the version for your terminal:
+
+**macOS/Linux (Bash or Zsh):**
+
+```bash
 uv run racing h2h \
   --challenger-module controllers.level_1 \
   --incumbent-module controllers.level_0 \
   --round-seconds 30 \
   --watch
 ```
+
+**Windows (PowerShell):**
+
+```powershell
+uv run racing h2h `
+  --challenger-module controllers.level_1 `
+  --incumbent-module controllers.level_0 `
+  --round-seconds 30 `
+  --watch
+```
+
+You can copy and paste the entire command into your terminal. If you type it
+one line at a time, press Enter after each line. The continuation character
+tells the terminal to wait for the rest; it may show a different prompt while
+it waits. Press Enter after the final `--watch` line to run the command.
+
+You can also write the command on one long line: remove the continuation
+characters and join the lines with a space between each part. It runs the same
+race either way.
 
 Your goals are for Level 1 to win and to travel at least `250.0` meters during
 the race. The results appear in the simulator when the round ends. If the car
@@ -335,11 +371,23 @@ uv run racing  --student-module controllers.level_2
 
 Then race it against Level 1:
 
-```text
+**macOS/Linux (Bash or Zsh):**
+
+```bash
 uv run racing h2h \
   --challenger-module controllers.level_2 \
   --incumbent-module controllers.level_1 \
   --round-seconds 30 \
+  --watch
+```
+
+**Windows (PowerShell):**
+
+```powershell
+uv run racing h2h `
+  --challenger-module controllers.level_2 `
+  --incumbent-module controllers.level_1 `
+  --round-seconds 30 `
   --watch
 ```
 
@@ -392,11 +440,23 @@ uv run racing --student-module controllers.level_3 --seed 110
 
 Then race it against Level 2:
 
-```text
+**macOS/Linux (Bash or Zsh):**
+
+```bash
 uv run racing h2h \
   --challenger-module controllers.level_3 \
   --incumbent-module controllers.level_2 \
   --round-seconds 30 \
+  --watch
+```
+
+**Windows (PowerShell):**
+
+```powershell
+uv run racing h2h `
+  --challenger-module controllers.level_3 `
+  --incumbent-module controllers.level_2 `
+  --round-seconds 30 `
   --watch
 ```
 
@@ -405,11 +465,23 @@ uv run racing h2h \
 If Level 3 wins, drive against it. This time your keyboard-controlled car is the
 challenger:
 
-```text
+**macOS/Linux (Bash or Zsh):**
+
+```bash
 uv run racing h2h \
   --challenger-keyboard \
   --incumbent-module controllers.level_3 \
   --round-seconds 30 \
+  --watch
+```
+
+**Windows (PowerShell):**
+
+```powershell
+uv run racing h2h `
+  --challenger-keyboard `
+  --incumbent-module controllers.level_3 `
+  --round-seconds 30 `
   --watch
 ```
 
