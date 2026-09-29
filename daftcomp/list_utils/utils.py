@@ -4,7 +4,7 @@ __author__: str = "000000000"
 
 
 def scale_range(start: int, stop: int, step: int) -> list[int]:
-    """Build a range with an exclusive stop; raise ValueError for step zero."""
+    """Build a range with an exclusive stop; assert that step is nonzero."""
     raise NotImplementedError("Build a new list using a while loop and append.")
 
 

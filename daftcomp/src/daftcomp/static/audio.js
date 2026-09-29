@@ -1,7 +1,7 @@
 /** Audio-clock scheduling shared by the player and browser acceptance tests. */
 export const SAMPLE_RATE = 48000;
 export const TRACK_GAIN = 1 / 8;
-export const DEFAULT_MASTER_VOLUME = 0.5;
+export const DEFAULT_MASTER_VOLUME = 0.8;
 // Fixed headroom also covers the browser's band-limited square-wave overshoot.
 export const VOICE_PEAK_GAIN = 0.7;
 // Share the queue across score replacements as well as rapid transport clicks.

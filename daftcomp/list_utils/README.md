@@ -1,65 +1,71 @@
 ---
-title: "EX04 - List Utils: Harder, Better, Faster, Stronger"
+title: "EX04 - daftcomp - List Utils"
 author:
   - Kris Jordan
+  - Izzi Hinks
+  - Luke Aiello
 page: exercises
 template: overview
 ---
 
-# List Utils: Harder, Better, Faster, Stronger
+# List Utils: daftcomp Edition
 
 Someone scrambled the band's sheet music. Your job is to build six list utility
 functions that can put it back together. Along the way, you will make scales,
-change pitches, and play notes at half time. Once your functions work, a supplied
-program will use them to unlock and play an eight-part song.
+change pitches, and play notes at half time. Once your functions work, a secret,
+supplied program will use them to unlock and play an eight-part song.
 
-You do not need to read music or recognize the song. The goal is to practice
-traversing lists with `while` loops, building new lists, changing an existing
-list, and writing tests that distinguish these behaviors.
+You do not need to read music or recognize the song (but it is a great song). 
+The goal is to practice traversing lists with `while` loops, building new lists, 
+changing an existing list, and writing tests that distinguish these behaviors.
 
 ## Allowed constructs
 
 In `utils.py`, use variables, type annotations, arithmetic, comparisons,
 `if`/`else`, `while` loops, indexing, and list literals such as `[]`.
 You may call `len`, the list method `append`, and your own utility functions.
-You may import `REST` and `HOLD` from `daftcomp` and raise `ValueError`.
+You may import `REST` and `HOLD` from `daftcomp`. Use `assert` to check required
+parameter invariants, as we have practiced in class.
 The supplied `NotImplementedError` lines are placeholders to replace.
 
-The following shortcuts are off-limits in your implementations:
+If you have prior programming experience, you may be inclined to use some of
+the more advanced approaches below. These are off-limits in your implementations.
+We have not covered them in class, so we do not expect anyone to know or use
+them for this exercise:
 
 - Other built-in functions, including `range`, `list`, `reversed`, and `sorted`.
 - `for` loops, comprehensions, generators, and recursion.
 - Slices such as `notes[:]` or `notes[::-1]`.
 - List methods other than `append`, including `copy`, `reverse`, and `extend`.
-- Concatenating, multiplying, or comparing entire lists using `+`, `*`, or `==`.
+- Concatenating, multiplying entire lists using `+`, `*`.
 - The membership operators `in` and `not in`.
 
 You **can** use arithmetic and comparisons on individual integers. The
 restrictions apply to `utils.py`; whole-list equality and `is` are encouraged
 in tests. The supplied song files are already written for you.
 
-## 0. Establish your modules
+## 0. Understand your modules
 
-Follow the [Daftcomp setup instructions](../README.md), then open
-`list_utils` inside the **daftcomp** workspace folder. Your work goes in:
+Open `list_utils` inside the **daftcomp** workspace folder. Your work goes in:
 
 - `utils.py`: the six function implementations.
 - `utils_test.py`: your unit tests.
 
 Keep a module docstring in both files and replace each `__author__` placeholder
 with your 9-digit student PID as a string. Keep the supplied function names,
-parameter names, and type annotations. Notice the spelling **`caesar`**.
+parameter names, and type annotations.
 
-The remaining files are supplied: `rehearsal.py` plays a short scale,
-`encoded_song.py` contains the locked music, and `song.py` contains its decoding
-recipe. Do not edit `encoded_song.py` or `song.py` to bypass a missing function.
+The remaining files are supplied: 
+
+* `rehearsal.py` plays a short scale. You are encouraged to record a longer piece in the keyboard studio.
+* `encoded_song.py` contains the locked music, and `song.py` contains its decoding recipe. Do not edit `encoded_song.py` or `song.py` to bypass a missing function.
 
 ### Writing unit tests
 
 For **each** of the six functions, write at least **three** meaningful tests:
 two expected cases and one edge case. That is at least **18 tests you write**;
 the provided example does not count. Give each test a descriptive name starting
-with `test_`, a docstring, and a `-> None` return annotation.
+with `test_`, a descriptive docstring, and a `-> None` return annotation.
 
 Import functions into your test file as you need them:
 
@@ -72,7 +78,7 @@ workspace setup succeeds. Uncomment them when you are ready to test
 `scale_range`. A separate player setup test runs from the beginning; it does
 not check your functions or count toward your 18 tests.
 
-For every list-taking function that returns a list, test three separate facts:
+For every list-taking function that **returns a list**, test three separate facts:
 the result has the right values, the input has not changed, and the result is a
 different list object. For example, this test checks copying even when offset is
 zero:
@@ -89,8 +95,9 @@ def test_shift_pure_zero_offset() -> None:
 
 `==` compares values. `is` checks whether two references point to the same object.
 For `shift_mutate`, keep an alias and check that it sees the changes; also check
-that the call returns `None`. Include empty inputs. For functions that raise an
-error, add a test using `pytest.raises`, as demonstrated below.
+that the call returns `None`. Include empty inputs. For required parameter
+invariants, test that invalid inputs fail an assertion using
+`pytest.raises(AssertionError)`, as demonstrated below.
 
 Run your tests from the **daftcomp** project directory:
 
@@ -100,9 +107,13 @@ uv run python -m pytest
 
 You can also use **Daftcomp: Run EX04 Tests** from **Terminal > Run Task**,
 or VS Code's Testing pane.
+
 The tests do not open the music player. You can earn credit for good tests while
 your implementation is unfinished: write tests that describe correct behavior,
 not tests that expect the placeholder to raise `NotImplementedError`.
+
+**You are encouraged to write failing tests first, then correctly implement your 
+functions so that they pass!**
 
 ## 1. `scale_range(start: int, stop: int, step: int) -> list[int]`
 
@@ -112,7 +123,7 @@ boundary is **exclusive**: do not include `stop`, and do not cross it.
 - With a positive step, include values less than `stop`.
 - With a negative step, include values greater than `stop`.
 - If the direction cannot reach the stopping boundary, return a new empty list.
-- If `step` is zero, raise `ValueError`, even when `start == stop`.
+- Assert that `step` is nonzero, even when `start == stop`.
 
 ```python
 scale_range(60, 67, 2)  # [60, 62, 64, 66]
@@ -126,23 +137,18 @@ Your function works with general integers, even those outside the playable
 pitch range. You are implementing the behavior with a `while` loop yourself;
 do not call Python's `range` function.
 
-To raise an error, use this pattern inside your function:
-
-```python
-if step == 0:
-    raise ValueError("step must not be zero")
-```
-
-To test an error, import `pytest` in your test file:
+To test that a parameter invariant is enforced, import `pytest` in your test file.
+A failed assertion produces an `AssertionError`:
 
 ```python
 def test_scale_range_zero_step() -> None:
     """A zero step is rejected instead of causing an infinite loop."""
-    with pytest.raises(ValueError):
+    with pytest.raises(AssertionError):
         scale_range(60, 72, 0)
 ```
 
-Test ascending and descending values, exclusive boundaries, and empty results.
+Test ascending and descending values, exclusive boundaries, empty results,
+and the nonzero-step invariant.
 
 **Hear it:** in `rehearsal.py`, import `scale_range` from
 `list_utils.utils` and replace the supplied three-note list with
@@ -160,18 +166,15 @@ assigning to its indices. Do not return a list; the call returns `None`.
 ```python
 notes: list[int] = [60, 64, 67]
 alias: list[int] = notes
-shift_mutate(notes, 12)
-# notes is now [72, 76, 79]. alias sees those same values.
-# notes and alias still refer to the same list.
+shift_mutate(alias, 12)
+# notes and alias are now [72, 76, 79].
 ```
 
 The list's length stays the same. An empty list stays empty. Negative offsets
-subtract from each value; offset zero leaves the values unchanged. Reassigning
-the local parameter to a different list does not satisfy this contract.
+subtract from each value; offset zero leaves the values unchanged.
 
 This function does ordinary integer arithmetic, including on negative values:
 `shift_mutate([-2, -1, 60], 2)` changes that list to `[0, 1, 62]`.
-That behavior is useful when decoding the locked song.
 
 Test positive and negative offsets, mutation visible through an alias, and
 the `None` return. For playback, shifting a list of pitches by 12 raises it
@@ -184,8 +187,8 @@ you gave it. Predict the sound before running the program.
 
 ## 3. `shift_pure(original: list[int], offset: int) -> list[int]`
 
-Compute the same shifted values, but return them in a **new list**. Do not change
-`original`.
+Compute the same shifted values as the last function, but return them in a **new list**. 
+Do not change `original`.
 
 ```python
 original: list[int] = [60, 64, 67]
@@ -368,6 +371,4 @@ submitted **more than 24 hours** before it. The bonuses do not stack. Exactly
 timestamp of the submission being graded and the assignment's Gradescope due date.
 
 Required edge behavior and mutation contracts are part of function correctness.
-Source review checks the allowed constructs. The supplied song is your reward
-and an integration check; there is no extra credit tied to recognizing music,
-hearing audio, or composing your own song.
+Source review checks the allowed constructs. 
