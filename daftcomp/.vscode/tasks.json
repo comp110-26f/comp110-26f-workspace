@@ -10,8 +10,7 @@
         "--locked",
         "--managed-python",
         "python",
-        "-m",
-        "list_utils.rehearsal"
+        "list_utils/rehearsal.py"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -32,8 +31,7 @@
         "--locked",
         "--managed-python",
         "python",
-        "-m",
-        "list_utils.song"
+        "list_utils/song.py"
       ],
       "options": {
         "cwd": "${workspaceFolder}"

@@ -9,7 +9,7 @@ Build six list utility functions to unlock an eight-part song. Start with the
 2. Run **Terminal > Run Task > Sync all workspace projects** from `support`.
    This installs Daftcomp's dependencies and creates its own `.venv`.
 3. Expand the **daftcomp** folder and open `list_utils/rehearsal.py`.
-4. Run **Terminal > Run Task > Daftcomp: Rehearsal**, then click **Play** in
+4. Click **Run Python File** in the editor, then click **Play** in
    the browser. The supplied three-note phrase works before you implement
    any functions. Stop the Python program with **Ctrl+C**.
 
@@ -23,17 +23,23 @@ For terminal commands, open a terminal for the **daftcomp** folder. All commands
 in these instructions run from that folder:
 
 ```sh
-uv run python -m list_utils.rehearsal
+uv run python list_utils/rehearsal.py
 uv run python -m pytest
-uv run python -m list_utils.song
+uv run python list_utils/song.py
 ```
 
 Use **Daftcomp: Run EX04 Tests** or VS Code's Testing pane to run your tests.
 Use **Daftcomp: Play Unlocked Song** after implementing all six functions.
 The **Run and Debug** pane offers **Daftcomp: Debug Rehearsal** and
 **Daftcomp: Debug Unlocked Song** for stepping through calls with breakpoints.
-You can also use **Run Python File** with `rehearsal.py` or `song.py`.
+You can also use **Daftcomp: Rehearsal** from **Terminal > Run Task**.
 If VS Code asks for an interpreter, choose the environment in `daftcomp/.venv`.
+
+The sync task (or `uv sync --locked` from this folder) installs the player and
+its dependencies. The editable-install configuration in `pyproject.toml` adds
+both this folder and `src` to the environment's Python search path, so direct
+file launches can import `list_utils` and `daftcomp` from any working directory.
+Run sync again after updating the project configuration.
 
 Saving a running score updates the same browser tab. Click **Play** again to
 hear it. Closing the browser does not stop Python; use **Ctrl+C** in its terminal.

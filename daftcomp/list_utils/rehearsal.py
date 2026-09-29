@@ -1,11 +1,4 @@
-"""Run as a module or directly from your editor after implementing scale_range."""
-
-import sys
-from pathlib import Path
-
-# Keep list_utils imports working with VS Code's Run Python File button.
-if __package__ is None or __package__ == "":
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+"""Run this file to hear a phrase, then experiment with your list utilities."""
 
 from daftcomp import add_track, run
 

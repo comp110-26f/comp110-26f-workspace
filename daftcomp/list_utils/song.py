@@ -1,11 +1,4 @@
-"""The supplied decoding recipe. Run as a module or directly from your editor."""
-
-import sys
-from pathlib import Path
-
-# Direct-file launches put list_utils on the import path; add the project root too.
-if __package__ is None or __package__ == "":
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+"""The supplied decoding recipe. Run this file after implementing your utilities."""
 
 from daftcomp import add_track, run
 from list_utils.encoded_song import (

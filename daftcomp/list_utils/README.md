@@ -146,7 +146,7 @@ Test ascending and descending values, exclusive boundaries, and empty results.
 
 **Hear it:** in `rehearsal.py`, import `scale_range` from
 `list_utils.utils` and replace the supplied three-note list with
-`scale_range(60, 73, 2)`. Run `uv run python -m list_utils.rehearsal`
+`scale_range(60, 73, 2)`. Run `uv run python list_utils/rehearsal.py`
 and click **Play**.
 You can also open `rehearsal.py` and use VS Code's **Run Python File** button.
 Stop the Python program with Ctrl+C. Try changing the start, stop, and step in
@@ -307,7 +307,7 @@ values without sharing its list. This is a puzzle encoding, not secure encryptio
 When your functions and tests are ready, run:
 
 ```sh
-uv run python -m list_utils.song
+uv run python list_utils/song.py
 ```
 
 You can also open `song.py` and use VS Code's **Run Python File** button.

@@ -13,6 +13,10 @@ dependencies = [
 requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build]
+# Expose the exercises and player to direct-file launches in the project environment.
+dev-mode-dirs = [".", "src"]
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/daftcomp"]
 
