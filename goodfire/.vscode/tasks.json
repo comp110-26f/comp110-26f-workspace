@@ -46,7 +46,7 @@
       }
     },
     {
-      "label": "Create Good Fire Part 1 Submission",
+      "label": "Create EX05 - Good Fire Part 1 Submission",
       "type": "process",
       "command": "uv",
       "args": [

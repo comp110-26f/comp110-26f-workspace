@@ -119,10 +119,8 @@ This project lives in your COMP110 workspace as the `goodfire` folder.
    `support/README.md`).
 2. Open `goodfire` and use **Terminal → Run Task…**:
    * **Good Fire: Sketch Table (2D)** runs `app.py`.
-   * **Good Fire: Run Checks** runs the provided checks.
 
-   Or, in a terminal in the `goodfire` folder: `uv run python app.py`
-   and `uv run python -m pytest checks`.
+   Or, in a terminal in the `goodfire` folder: `uv run python app.py`.
 
    The app runs from the very start, even before you write any code. It
    shows the map of pines, hardwoods, and meadow, and skips anything that
@@ -693,7 +691,7 @@ Now experiment. Run `uv run python app.py`.
 
 ## Testing and submitting
 
-Run **Terminal > Run Task... > Create Good Fire Part 1 Submission** task. It writes a ZIP
+Run **Terminal > Run Task... > Create EX05 - Good Fire Part 1 Submission** task. It writes a ZIP
   with `goodfire/cover.py`, `goodfire/sketch.py`, and `goodfire/landscape.py`
   into the `goodfire` folder; upload that ZIP to EX05 on Gradescope.
 
