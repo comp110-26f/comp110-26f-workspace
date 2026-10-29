@@ -1,4 +1,10 @@
-# Good Fire — Part 2 (EX06): Plan a Good-Fire Burn (3D)
+# Good Fire — Part 2 (EX06): Plan a Prescribed Burn
+
+> **Finish Good Fire Part 1 (EX05) before you start Part 2 (EX06).** Part 2
+> runs on your Part 1 code: your `cover.py`, `sketch.py`, and
+> `landscape.py`. If any Part 1 method is unfinished, the 3D app and
+> `compare_plans.py` stop with a `NotImplementedError` from your Part 1
+> files.
 
 ## The story
 
@@ -63,87 +69,72 @@ calls your functions, and uses what they return.
 
 ## The science
 
-Spread follows the cellular-automaton model of Alexandridis et al. (2008):
+Fire spreads from square to square following a published model
+(Alexandridis et al. 2008), with fuel moisture damping in the spirit of
+Rothermel (1972). Three things matter most:
 
-`chance = P_H * (1 + p_veg) * (1 + p_den) * p_wind * p_slope * p_moisture`
+* **Wind**: fire races downwind. A **backing fire**, one that creeps into
+  the wind, is slow and gentle. Burn-day winds blow toward the north.
+* **Slope**: fire runs uphill, and the north (row 0) is uphill.
+* **Fuel moisture**: damp fuel burns slowly, and at 30% moisture it does
+  not burn at all.
 
-Your Part 1 plants already compute `P_H * (1 + p_veg) * (1 + p_den)`. The
-provided weather effects in `weather.py` multiply in the rest:
+**Embers** fly 3-10 squares downwind and can start spot fires, which can
+throw more embers. They start up to 90% of home ignitions (IBHS), which is
+why Firewise home hardening matters. On a burn day, a holding crew puts out
+most spot fires outside the burn area, but the windier the day, the more
+get away.
 
-* **Slope**: `exp(a * slope_degrees)` with `a = 0.078`. Fire runs uphill,
-  and row 0 (north) is uphill.
-* **Wind**: `exp(V * (c1 + c2 * (cos(theta) - 1)))`, with wind speed `V`
-  in m/s, `c1 = 0.045`, and `c2 = 0.131`. Fire races downwind. A fire
-  creeping *into* the wind (a **backing fire**) is slow and gentle.
-* **Fuel moisture**: `max(0, 1 - M / M_x)`, where `M` is the dead-fuel
-  moisture and `M_x = 0.30` is the moisture of extinction. This follows the
-  idea of Rothermel's (1972) moisture damping, simplified.
+**The burn window** is two weeks of daily forecasts. The burn happens on
+the first day that fits the prescription; if none fits, there is no burn.
 
-**Embers.** Spot fires 100-300 m ahead of a fire are common. An ember flies
-3-10 squares downwind (farther in a stronger wind), and where it starts a
-fire, that fire may throw another ember. Embers also start up to 90% of
-home ignitions (IBHS), which is why Firewise home hardening matters.
-
-**The burn day.** On the burn day, a holding crew patrols outside the burn
-area and puts out most spot fires that land there. In calm air they catch
-nearly all of them. The stronger the wind, the faster a spot fire grows,
-and the more of them get away. The burn window is two weeks of daily
-forecasts, and the burn happens on the first day that fits your
-prescription. If no day fits, there is no burn this season. Burn-day winds
-blow from the south, toward the north.
-
-**Simplifications.** Real crews light strips one after another, starting
-at the downwind line, so that each new strip burns into ground that has
-already burned. Our crew lights the whole ignition line at once. Our
-holding crew, burn window, and costs are teaching values, not measurements.
+The holding crew, burn window, and costs are teaching values, and our crew
+lights its whole ignition line at once (real crews light strips one after
+another).
 
 ## Setup
 
-Run the workspace's **Sync all workspace projects** task to pull Part 2 into
-your `goodfire` folder. Part 2 only *adds* files; your Part 1 `cover.py`,
-`sketch.py`, and `landscape.py` stay exactly as you left them. Then use
-**Terminal → Run Task…** and pick a `Good Fire` task, or run from the
-`goodfire` folder:
+To load the latest changes for EX06:
 
-```sh
-uv run python app3d.py                  # your chosen plan, historical climate
-uv run python app3d.py --hotter-drier   # your chosen plan, hotter and drier
-uv run python app3d.py --plan B         # watch plan B instead
-uv run python app3d.py --no-plan        # the same season with no plan
-uv run python compare_plans.py          # compare all five plans
-uv run python -m pytest checks
-```
+1. Open the full COMP110 workspace by opening `workspace.code-workspace`.
+2. Choose **Terminal → Run Task… Sync all workspace projects** under the
+   support folder.
+3. Wait for the terminal to finish. It has succeeded when it ends with:
+   Everything is ready. You can start working!
 
-The tasks **Good Fire: 3D Season, Choose a Plan...** and **Good Fire:
-Compare One Plan...** ask which plan (A to E) to show.
+   Part 2 only *adds* files to your `goodfire` folder; your Part 1
+   `cover.py`, `sketch.py`, and `landscape.py` stay exactly as you left
+   them.
+4. Open `goodfire` and use **Terminal → Run Task…** to pick a Good Fire
+   task:
+   * **Good Fire: 3D Season (your chosen plan)**, and the **hotter and
+     drier** and **no plan** versions
+   * **Good Fire: 3D Season, Choose a Plan...** and **Good Fire: Compare
+     One Plan...**, which ask which plan (A to E) to show
+   * **Good Fire: Compare the Plans**
+   * **Create EX06 - Good Fire Part 2 Submission**
+
+   Or, in a terminal in the `goodfire` folder:
+
+   ```sh
+   uv run python app3d.py                  # your chosen plan, historical climate
+   uv run python app3d.py --hotter-drier   # your chosen plan, hotter and drier
+   uv run python app3d.py --plan B         # watch plan B instead
+   uv run python app3d.py --no-plan        # the same season with no plan
+   uv run python compare_plans.py          # compare all five plans
+   uv run python -m pytest checks          # run the checks
+   ```
 
 3D controls: click the land to light a fire · Space pause · S one step ·
 R restart · Up/Down speed · right-drag to orbit · scroll to zoom. Hover over
 any square to see its `str()`.
 
-## Files
-
-| File | Yours? | What it holds |
-| --- | --- | --- |
-| `goodfire/cover.py`, `sketch.py`, `landscape.py` | from Part 1 | your Part 1 classes, unchanged |
-| **`goodfire/burnplan.py`** | **yours** | five functions with sets and dictionaries; `fire_reach`, `control_line`, and `BurnPlan` are provided worked examples that use them |
-| `goodfire/recursion.py` | provided | `spot_fire`: a worked example of recursion (an ember that starts a fire can throw another ember) |
-| **`goodfire/plan.py`** | **yours** | `CHOSEN_PLAN`: the plan you choose |
-| `goodfire/plans.py` | provided | the five season plans, A to E |
-| `goodfire/fieldkit.py` | provided | turns the map into plain data (`land_map`, `neighbor_map`, `squares_of`) and other helpers |
-| `goodfire/looks.py` | provided | gives every kind of square its `appearance()` for the 3D view |
-| `goodfire/simulation.py` | provided | `Wildfire`: the burn day, then the season |
-| `goodfire/weather.py`, `tactics.py` | provided | weather effects; fuel breaks, defensible space, water drops |
-| `goodfire/part2_protocols.py`, `scenario.py` | provided | the protocols; the season's map, fires, budget, climates, and forecasts |
-| `viewer3d.py`, `models3d.py`, `effects3d.py`, `app3d.py`, `compare_plans.py` | provided | the 3D sand table, and a side-by-side comparison of the plans |
-
-The starter includes reference Part 1 files; your own Part 1 files work
-too. As before, every file you hand in needs a module docstring,
-`__author__`, and type annotations. Methods that already have code are
-provided worked examples; each `raise NotImplementedError("TODO: ...")` is
-yours.
-
 ## Your tasks
+
+You edit two files, `goodfire/burnplan.py` and `goodfire/plan.py`. As
+before, each needs a module docstring, `__author__`, and type annotations.
+Code that is already written is a provided worked example; each
+`raise NotImplementedError("TODO: ...")` is yours to replace.
 
 ### Step 1: the burn plan (`burnplan.py`)
 
@@ -152,19 +143,46 @@ on the values it is given, and none of them should change the lists, sets,
 or dictionaries they are given. Test each one as you go: `uv run python -m pytest checks`
 runs the provided checks.
 
-**`count(kinds: list[str]) -> dict[str, int]`**: how many times each kind
-of land appears in the list. Loop through the list; if a kind is already
-a key, add 1 to its value, otherwise give it the value 1.
+#### 1.1: `count`
+
+**`count(kinds: list[str]) -> dict[str, int]`**
+
+* **Takes** a list of kinds of land, one string per square, like the
+  squares along a row of the map or along a control line.
+* **Returns** a dictionary from each kind to how many times it appears.
+  A kind that is not in the list is not a key.
+* **Why:** before a crew commits to a burn, they want to know what it
+  touches: how much is pine, how much is hardwood, and whether any homes
+  are in the way. `compare_plans.py` uses your `count` to report what
+  burned off target on a burn day (for example, `12 home`), so you can see
+  why a plan went wrong.
+* **How:** start with an empty dictionary. Loop through the list; if a
+  kind is already a key, add 1 to its value, otherwise give it the value 1.
 
 ```python
 count(["pine", "pine", "home"])  # returns {"pine": 2, "home": 1}
 count([])  # returns {}
 ```
 
-**`group_by_kind(land: dict[Square, str]) -> dict[str, set[Square]]`**:
-the squares of each kind, as a set. Loop through the keys of `land`; the
-first time you see a kind, give it an empty set (`set()`), then `add` the
-square to that kind's set.
+![count on row 8 of the season map: 30 squares become hardwood 15, pine 7, road 1, water 7](images/count.png)
+
+
+#### 1.2: `group_by_kind`
+
+**`group_by_kind(land: dict[Square, str]) -> dict[str, set[Square]]`**
+
+* **Takes** a land map: a dictionary from each `Square` to the kind of land
+  on it.
+* **Returns** the same information turned around: a dictionary from each
+  kind of land to the set of `Square`s that hold it.
+* **Why:** a land map answers "what is on this square?", but a burn plan
+  needs the opposite question answered: "where are all the pines?" and
+  "where are the homes?" `BurnPlan.area()` uses your groups to collect the
+  fuel it means to burn and to find the homes it must stay away from. Each
+  group is a set because a square either is in it or is not; order and
+  repeats do not matter, and `in` is fast.
+* **How:** loop through the keys of `land`. The first time you see a kind,
+  give it an empty set (`set()`); then `add` the square to that kind's set.
 
 ```python
 a: Square = Square(0, 0)
@@ -174,12 +192,54 @@ land: dict[Square, str] = {a: "pine", b: "home", c: "pine"}
 group_by_kind(land)  # returns {"pine": {a, c}, "home": {b}}
 ```
 
+![group_by_kind on the whole season map: one set of Squares for each kind of land](images/group_by_kind.png)
+
+
+#### 1.3: `in_prescription`
+
 **`in_prescription(forecast: dict[str, float], prescription: dict[str,
-list[float]]) -> bool`**: whether a day's forecast fits a prescription.
-Each value in the prescription is a `[low, high]` range, and both ends are
-allowed. Every condition the prescription names must be in the forecast
-and inside its range. Conditions the prescription does not name do not
-matter.
+list[float]]) -> bool`**
+
+**What is a prescription?** Every real burn plan includes a
+*prescription*: the range of weather the crew is allowed to burn in, agreed
+on before anyone lights a match. If the day's weather is outside any one
+range, the burn waits. In this project a prescription is a dictionary. Each
+key names a weather condition, and each value is a two-item list
+`[low, high]`: the lowest and highest values allowed, both included.
+
+```python
+careful: dict[str, list[float]] = {"wind": [1.0, 4.0], "moisture": [0.08, 0.20]}
+```
+
+A forecast uses the same keys, with one value each:
+`{"wind": 2.5, "moisture": 0.12}`. The two conditions in this project are:
+
+| Condition | Unit | What it means | Too low | Too high |
+| --- | --- | --- | --- | --- |
+| `"wind"` | meters per second (1 m/s is about 2.2 mph) | how fast the wind blows; forecasts here run from about 1 to 9 m/s | not enough breeze to carry smoke away and keep the fire moving in a steady, predictable direction | flames run fast, and more embers fly over the control line, faster than the holding crew can catch them |
+| `"moisture"` | a fraction of the fuel's dry weight (0.12 means 12% water) | how damp the dead needles and grass are; 0.30 (30%) is so wet that fire cannot spread | drought-dry fuel burns hot and fast, so the burn is harder to hold | the fire creeps, and on very damp days it goes out before it covers the unit |
+
+So `careful` means: burn only when the wind is between 1 and 4 m/s *and*
+the fuel is between 8% and 20% moisture. A wider prescription, like plan
+B's `{"wind": [1.0, 9.0], "moisture": [0.04, 0.22]}`, fits almost any day,
+but it allows windy, dry days when embers escape.
+
+* **Takes** one day's forecast, a dictionary from each weather condition to
+  its value (like `{"wind": 2.5, "moisture": 0.12}`), and a prescription, a
+  dictionary from each condition to the `[low, high]` range the burn
+  allows.
+* **Returns** `True` if every condition the prescription names is in the
+  forecast and inside its range (both ends are allowed), and `False`
+  otherwise. Conditions in the forecast that the prescription does not
+  name do not matter.
+* **Why:** a burn boss lights fire only on a day that fits the
+  prescription. Too windy, and embers fly over the control line; too damp,
+  and the fire goes out; too dry, and it burns too hot. Because the
+  prescription is a dictionary, it can name any conditions it likes, and
+  your function works for all of them.
+* **How:** loop through the conditions in the prescription. If one is
+  missing from the forecast, or its value is below `low` or above `high`,
+  return `False`. If the loop finishes, every condition fit: return `True`.
 
 ```python
 rx: dict[str, list[float]] = {"wind": [1.0, 4.0], "moisture": [0.08, 0.2]}
@@ -189,9 +249,25 @@ in_prescription({"wind": 4.1, "moisture": 0.12}, rx)  # False: too windy
 in_prescription({"wind": 2.5}, rx)  # False: no moisture
 ```
 
+![in_prescription for five forecasts against Plan D's prescription, with each value drawn on its range](images/in_prescription.png)
+
+
+#### 1.4: `first_burn_day`
+
 **`first_burn_day(forecasts: list[dict[str, float]], prescription: dict[str,
-list[float]]) -> int`**: the index of the first forecast that fits the
-prescription, or `-1` if none does. Use your `in_prescription`.
+list[float]]) -> int`**
+
+* **Takes** a list of daily forecasts, in order starting with day 0, and a
+  prescription.
+* **Returns** the index of the first day whose forecast fits the
+  prescription, or `-1` if no day fits.
+* **Why:** the crew has a two-week burn window and burns on the first good
+  day. The simulation runs the burn on the day your function picks, and
+  `-1` means there is no burn this season, which happens more often in a
+  hotter, drier climate.
+* **How:** loop through the forecasts with an index. Use your
+  `in_prescription` on each one, and return the index as soon as one fits.
+  If the loop finishes without a match, return `-1`.
 
 ```python
 calm: dict[str, list[float]] = {"wind": [1.0, 4.0]}
@@ -200,15 +276,26 @@ first_burn_day(days, calm)  # returns 1
 first_burn_day([{"wind": 6.0}], calm)  # returns -1
 ```
 
-The last function answers the question at the heart of a burn plan:
-where can the fire go next?
+![first_burn_day on two real burn windows: the first fits on day 2, the second never fits and returns -1](images/first_burn_day.png)
+
+
+#### 1.5: `spread_once`
 
 **`spread_once(burning: set[Square], fuel: set[Square], neighbors:
-dict[Square, list[Square]]) -> set[Square]`**: the squares fire spreads to
-in one step. For each burning square, look at its neighbors
-(`neighbors[square]`); a neighbor catches if it is fuel and is not
-burning already. (The provided `control_line` at the bottom of the file
-has almost the same shape: read it first.)
+dict[Square, list[Square]]) -> set[Square]`**
+
+* **Takes** the set of squares burning now, the set of squares that are
+  fuel, and a neighbors map (for each square, the squares right next to it).
+* **Returns** the set of squares the fire spreads to in one step: every
+  neighbor of a burning square that is fuel and is not burning already.
+* **Why:** this is the question at the heart of a burn plan: where can the
+  fire go next? Repeating this one step until nothing new catches (the
+  provided `fire_reach`, below) tells the crew every square the burn could
+  reach, and so where the control line has to go.
+* **How:** start with an empty set. For each burning square, look at each
+  of its neighbors (`neighbors[square]`); if a neighbor is in `fuel` and
+  not in `burning`, add it. The provided `control_line` at the bottom of
+  the file has almost the same shape: read it first.
 
 ```python
 # a - b - c   d    (a line of three squares, and d off on its own)
@@ -218,6 +305,9 @@ spread_once({a}, {a, b, c, d}, near)  # returns {b}
 spread_once({a, b}, {a, b, c, d}, near)  # returns {c}
 spread_once({a}, {a, c, d}, near)  # returns set(): b is not fuel
 ```
+
+![spread_once in three panels: the burning squares, each neighbor checked, and the squares that catch](images/spread_once.png)
+
 
 **Read `fire_reach`** (provided, right after `spread_once`). It uses your
 `spread_once` to answer the bigger question: where could the fire reach
@@ -229,6 +319,9 @@ nothing new.
 fire_reach({a}, {a, b, c, d}, near)  # returns {a, b, c}: d is not connected
 fire_reach({a}, {a, c, d}, near)  # returns {a}: b is not fuel
 ```
+
+![fire_reach from one start, colored by the step each square caught, and Plan D's burn area and control line](images/fire_reach.png)
+
 
 **See how the provided code uses them.** Read `control_line` and
 `BurnPlan` at the bottom of `burnplan.py`. `BurnPlan.area()` groups the
@@ -297,24 +390,38 @@ Gradescope runs the plan you choose over the same 10 seasons
 
 ## Testing and submitting
 
-Run **Terminal > Run Task... > Create EX06 - Good Fire Part 2 Submission** task and upload the ZIP
-it writes into the `goodfire` folder to EX06 on Gradescope. It holds
-`goodfire/burnplan.py` and `goodfire/plan.py`.
+Run **Terminal > Run Task... > Create EX06 - Good Fire Part 2 Submission**
+task. It writes a ZIP with `goodfire/burnplan.py` and `goodfire/plan.py`
+into the `goodfire` folder; upload that ZIP to EX06 on Gradescope.
 
-| Gradescope test | Points |
-| --- | --- |
-| Submission requirements (2 files x 1) | 2 |
-| Functions and classes are where they belong | 5 |
-| `count` | 13 |
-| `group_by_kind` | 15 |
-| `in_prescription` | 15 |
-| `first_burn_day` | 12 |
-| `spread_once` | 16 |
-| `CHOSEN_PLAN` names one of the plans | 4 |
-| Chosen plan: habitat restored | 7 |
-| Chosen plan: the burn stays on target | 5 |
-| Chosen plan: homes kept safe | 6 |
-| **Total** | **100** |
+Each function's points are split evenly across its test cases, so a
+function that passes 4 of its 5 cases earns 4/5 of its points. When a case
+fails, Gradescope shows the input, what your function returned, and often
+a hint, plus the command that runs the same checks on your laptop.
+
+## How it all fits together
+
+You only edit `burnplan.py` and `plan.py`, but you are encouraged to read
+the other files if you are curious how everything fits together: how the
+map becomes plain data, how a burn day runs, and how the 3D view draws
+it all.
+
+| File | Yours? | What it holds |
+| --- | --- | --- |
+| `goodfire/cover.py`, `sketch.py`, `landscape.py` | from Part 1 | your Part 1 classes, unchanged |
+| **`goodfire/burnplan.py`** | **yours** | five functions with sets and dictionaries; `fire_reach`, `control_line`, and `BurnPlan` are provided worked examples that use them |
+| `goodfire/recursion.py` | provided | `spot_fire`: a worked example of recursion (an ember that starts a fire can throw another ember) |
+| **`goodfire/plan.py`** | **yours** | `CHOSEN_PLAN`: the plan you choose |
+| `goodfire/plans.py` | provided | the five season plans, A to E |
+| `goodfire/fieldkit.py` | provided | turns the map into plain data (`land_map`, `neighbor_map`, `squares_of`) and other helpers |
+| `goodfire/looks.py` | provided | gives every kind of square its `appearance()` for the 3D view |
+| `goodfire/simulation.py` | provided | `Wildfire`: the burn day, then the season |
+| `goodfire/weather.py`, `tactics.py` | provided | weather effects; fuel breaks, defensible space, water drops |
+| `goodfire/part2_protocols.py`, `scenario.py` | provided | the protocols; the season's map, fires, budget, climates, and forecasts |
+| `viewer3d.py`, `models3d.py`, `effects3d.py`, `app3d.py`, `compare_plans.py` | provided | the 3D sand table, and a side-by-side comparison of the plans |
+
+The starter includes reference Part 1 files; your own Part 1 files work
+too.
 
 ## Sources
 
