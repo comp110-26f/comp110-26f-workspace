@@ -7,11 +7,14 @@ Add a plan's letter to see each season for that plan:
 """
 
 import sys
+from collections.abc import Callable
 
+from goodfire import burnplan
 from goodfire import plan
 from goodfire import scenario
 from goodfire.burnplan import count
 from goodfire.fieldkit import kind_at
+from goodfire.grid import Square
 from goodfire.plans import PLANS
 from goodfire.plans import SeasonPlan
 from goodfire.simulation import Wildfire
@@ -82,8 +85,36 @@ def details(name: str) -> None:
             print(f"{'':<20}off target: {listed}")
 
 
+def unfinished() -> list[str]:
+    """Return the burnplan.py functions that still raise NotImplementedError."""
+    a: Square = Square(0, 0)
+    tries: dict[str, Callable[[], object]] = {
+        "count": lambda: burnplan.count([]),
+        "group_by_kind": lambda: burnplan.group_by_kind({}),
+        "in_prescription": lambda: burnplan.in_prescription({}, {}),
+        "first_burn_day": lambda: burnplan.first_burn_day([], {}),
+        "spread_once": lambda: burnplan.spread_once(set(), {a}, {a: []}),
+    }
+    missing: list[str] = []
+    for name, attempt in tries.items():
+        try:
+            attempt()
+        except NotImplementedError:
+            missing.append(name)
+    return missing
+
+
 def main() -> None:
     """Compare every plan over ten seasons, or show one plan in detail."""
+    missing: list[str] = unfinished()
+    if missing:
+        print(
+            "compare_plans.py needs all five functions in burnplan.py, because "
+            "plans A-D are built with them (Step 1 of PART2.md).\n"
+            f"Still to write: {', '.join(missing)}.\n"
+            "Check each one as you go with: uv run python -m pytest checks"
+        )
+        sys.exit(1)
     if len(sys.argv) > 1:
         details(sys.argv[1].upper())
         return

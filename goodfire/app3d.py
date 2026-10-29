@@ -14,6 +14,10 @@ Options:
 
 import sys
 
+# Load Qt (through comp110_gui) before the 3D engine. On Windows the 3D
+# engine's bundled C++ runtime DLL would otherwise load first, and Qt then
+# crashes while starting up (exit code 0xC0000005).
+import comp110_gui  # noqa: F401  (must stay above the ursina imports)
 from ursina import Entity
 from ursina import Ursina
 
