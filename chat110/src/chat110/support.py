@@ -72,7 +72,9 @@ def _get_model() -> PreTrainedModel:
     """Load the model once, using the same settings for inspection and chat."""
     import torch
     from transformers import AutoModelForCausalLM
+    from transformers.utils import logging
 
+    logging.disable_progress_bar()
     torch.set_num_threads(min(4, os.cpu_count() or 1))
     return AutoModelForCausalLM.from_pretrained(
         str(ensure_model()), dtype=torch.float32, use_safetensors=True,

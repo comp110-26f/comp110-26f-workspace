@@ -1,9 +1,5 @@
-"""Download the model without installing any third-party packages."""
+"""Download the verified model bundle using the project environment."""
 
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parent / "src"))
 from chat110.model import (
     BUNDLE_CONFIG as BUNDLE_CONFIG,
 )
