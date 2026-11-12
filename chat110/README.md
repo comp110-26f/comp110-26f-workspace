@@ -30,8 +30,8 @@ due date:
 
 | Part | Stages | Graded work |
 | --- | --- | --- |
-| [Part 1: Tokens and probabilities](#part-1-tokens-and-probabilities) | 0–2 | Stages 1 and 2; Stage 0 is a supplied warm-up |
-| [Part 2: Sampling and top-p](#part-2-sampling-and-top-p) | 3–4 | Stages 3 and 4, building on your Part 1 helpers |
+| [Part 1: Tokens and probabilities](#part-1-tokens-and-probabilities) | 0–2 | Stages 1 and 2, 50 points each; Stage 0 is a supplied warm-up |
+| [Part 2: Sampling and top-p](#part-2-sampling-and-top-p) | 3–4 | Stages 3 and 4, 50 points each, building on your Part 1 helpers |
 
 Check each Gradescope assignment for its deadline. Both parts use the same
 submission bundle; each grader evaluates only the stages for its part.
@@ -1068,14 +1068,20 @@ unfinished stages for Part 1. Regenerate the ZIP after editing your code.
 Submit the generated ZIP rather than the entire project,
 the model cache, or the provided `chat110` runtime.
 
-Each graded stage is worth 25 points, with two graded stages in each part.
-Stage 0 is practice. Each stage includes
-2 points for a module docstring, your nine-digit `__author__` PID, the supplied
-typed function signatures and their docstrings, and type annotations on every
-function's parameters and return value. The remaining points check that stage's
-functions with small deterministic examples. Later stages check their copies
+Each part is worth **100 base points**, with **50 points** for each of its two
+graded stages. Stage 0 is a supplied warm-up with a zero-point presence/syntax
+check in Part 1; its absence does not deduct points from Stages 1 and 2.
+Each graded stage includes **4 points** for a module docstring, your nine-digit
+`__author__` PID, the supplied typed function signatures and their docstrings,
+and type annotations on every function's parameters and return value. The
+remaining **46 points** check that stage's functions with small deterministic
+examples. Later stages check their copies
 of earlier helpers too, so preserve those implementations. Function names and
 types are required; parameter names may differ.
+
+Helpers earn credit separately from `next_token`, but each check group awards
+its points only when all its cases pass. The feedback shows points by stage,
+the base score, early-submission bonus, and final score.
 
 Grading checks negative logits and ties, normalization, large logits, exact
 sampling boundaries, zero probabilities, and top-p thresholds. Keep the first
@@ -1088,5 +1094,7 @@ quality judgment of generated prose is involved, and there is no leaderboard.
 Following the course convention, submitting at least 48 hours early adds 5
 points; at least 24 hours early adds 3 points. Each part's bonus is based on
 Gradescope's recorded submission time and that part's assignment deadline.
-These are alternative bonuses, not cumulative. Read the separate feedback
-for each stage and resubmit to the corresponding assignment as needed.
+These are alternative bonuses, not cumulative. A complete submission can earn
+105 points with the 48-hour bonus or 103 points with the 24-hour bonus in each
+part. Read the separate feedback for each stage and resubmit to the
+corresponding assignment as needed.
